@@ -44,7 +44,7 @@ app.post('/api/lead', async (req, res) => {
         const phoneNumber = `55${whatsapp}`;
         
         // Montar mensagem personalizada
-        const message = `Olá, ${name}! Obrigado por se cadastrar! Confira o resumo do que fiz na imagem em anexo! 📚🔗Você pode baixar a versão completa do livro como arquivo de teste no link abaixo abaixo. 📚🔗`;
+        const message = `Olá, ${name}! Obrigado por se cadastrar! Confira o resumo do que fiz na imagem em anexo! 📚🔗Você pode baixar a versão completa do livro como arquivo de teste no link abaixo abaixo. 📚🔗\n\n\n https://drive.google.com/file/d/1VdmBuUCfjk32_-n9b6oP3mGUgVwjINE4/view?usp=sharing`;
 
         // Ler o arquivo PNG e converter para base64
         const filePath = path.join(__dirname, 'resumo.png');
