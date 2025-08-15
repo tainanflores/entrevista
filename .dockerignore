@@ -6,5 +6,10 @@ README.md
 .env
 .nyc_output
 coverage
-.coverage
 logs
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+*.swp
+*.swo

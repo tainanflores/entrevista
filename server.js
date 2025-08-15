@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,8 +19,6 @@ app.get('/', (req, res) => {
 
 // Rota da API para leads
 app.post('/api/lead', async (req, res) => {
-    const WEBHOOK_URL = "https://hook.us2.make.com/rmp5ou4vssh6m1wxuq4hj2kyhb07sfmx";
-    
     try {
         console.log('Dados recebidos:', req.body);
         
@@ -40,27 +40,81 @@ app.post('/api/lead', async (req, res) => {
             });
         }
         
-        // Enviar para Make.com
-        const response = await fetch(WEBHOOK_URL, {
+        // Formatar número para formato internacional (55 + número)
+        const phoneNumber = `55${whatsapp}`;
+        
+        // Montar mensagem personalizada
+        const message = `Olá, ${name}! Obrigado por se cadastrar! Confira o resumo do que fiz na imagem em anexo! 📚🔗Você pode baixar a versão completa do livro como arquivo de teste no link abaixo abaixo. 📚🔗`;
+
+        // Ler o arquivo PNG e converter para base64
+        const filePath = path.join(__dirname, 'resumo.png');
+
+        if (!fs.existsSync(filePath)) {
+            throw new Error('Arquivo PNG não encontrado: ' + filePath);
+        }
+
+        const fileBuffer = fs.readFileSync(filePath);
+        const fileBase64 = fileBuffer.toString('base64');
+
+        console.log('📄 PNG carregado:', {
+            arquivo: 'resumo.png',
+            tamanho: `${Math.round(fileBuffer.length / 1024)}KB`,
+            base64Length: fileBase64.length
+        });
+        
+        // Configurar dados para Evolution API
+        const evolutionData = {
+            mediatype: "image",
+            mimetype: "image/png",
+            media: fileBase64,
+            caption: message,
+            fileName: process.env.FILENAME || "resumo.png",
+            linkPreview: true,
+            number: phoneNumber
+        };
+        
+        // URL da Evolution API
+        const evolutionUrl = `${process.env.EVOLUTION_API_URL}/message/sendMedia/${process.env.EVOLUTION_INSTANCE}`;
+        
+        console.log('Enviando para Evolution API:', {
+            url: evolutionUrl,
+            phone: phoneNumber,
+            name: name
+        });
+        
+        // Enviar para Evolution API
+        const response = await fetch(evolutionUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'apikey': process.env.EVOLUTION_API_KEY
             },
-            body: JSON.stringify(req.body)
+            body: JSON.stringify(evolutionData)
         });
         
+        const responseData = await response.json();
+        
         if (response.ok) {
-            console.log('Lead enviado com sucesso para Make.com');
-            res.status(200).json({ ok: true, message: 'Lead enviado com sucesso' });
+            console.log('Mensagem enviada com sucesso via Evolution API:', responseData);
+            res.status(200).json({ 
+                ok: true, 
+                message: 'Lead processado e mensagem WhatsApp enviada com sucesso!',
+                data: {
+                    name: name,
+                    phone: phoneNumber,
+                    status: 'sent'
+                }
+            });
         } else {
-            throw new Error(`Make.com retornou status: ${response.status}`);
+            throw new Error(`Evolution API retornou erro: ${response.status} - ${JSON.stringify(responseData)}`);
         }
         
     } catch (error) {
         console.error('Erro ao processar lead:', error);
         res.status(500).json({ 
             ok: false, 
-            error: 'Erro interno do servidor' 
+            error: 'Erro interno do servidor',
+            details: error.message
         });
     }
 });
