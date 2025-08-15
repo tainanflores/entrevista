@@ -113,14 +113,15 @@ Processa um novo lead e envia mensagem WhatsApp.
 ## 🏗️ Estrutura do Projeto
 
 ```
-├── index.html          # Landing page
-├── styles.css          # Estilos CSS
-├── script.js           # JavaScript frontend
-├── server.js           # Servidor Express
+├── public/             # Arquivos públicos (servidos estaticamente)
+│   ├── index.html      # Landing page
+│   ├── styles.css      # Estilos CSS
+│   └── script.js       # JavaScript frontend
+├── server.js           # Servidor Express (privado)
+├── resumo.png          # Arquivo de imagem a ser enviado (privado)
 ├── package.json        # Dependências Node.js
-├── .env                # Configurações (não versionado)
+├── .env                # Configurações (não versionado/privado)
 ├── .env.example        # Exemplo de configurações
-├── Resumo Linux Pdf.pdf # Arquivo PDF a ser enviado
 ├── Dockerfile          # Configuração Docker
 ├── docker-compose.yml  # Orquestração Docker
 ├── .gitignore          # Arquivos ignorados pelo Git
@@ -131,9 +132,18 @@ Processa um novo lead e envia mensagem WhatsApp.
 
 - As configurações sensíveis estão no arquivo `.env`
 - O arquivo `.env` não deve ser versionado (já configurado no `.gitignore`)
+- **Apenas a pasta `public/` é servida estaticamente** - arquivos sensíveis ficam privados
 - Use sempre HTTPS em produção
 - Valide todos os dados de entrada
-- O arquivo PDF é lido localmente e convertido para base64 automaticamente
+- O arquivo de imagem é lido localmente e convertido para base64 automaticamente
+- API key da Evolution API nunca é exposta publicamente
+
+### 🛡️ **Arquivos Protegidos (não acessíveis publicamente):**
+- `.env` - Credenciais e configurações
+- `server.js` - Código fonte da aplicação
+- `resumo.png` - Arquivo original
+- `package.json` - Informações do projeto
+- Todos os outros arquivos da raiz
 
 ## 📱 Como Funciona
 

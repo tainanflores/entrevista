@@ -4,6 +4,7 @@ npm-debug.log
 .gitignore
 README.md
 .env
+.env.example
 .nyc_output
 coverage
 logs
@@ -13,3 +14,7 @@ Thumbs.db
 .idea
 *.swp
 *.swo
+# Arquivos originais (já copiados para public/)
+index.html
+styles.css
+script.js
