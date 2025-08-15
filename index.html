@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Entre em contato</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Cadastre-se</h1>
+            <p>Preencha seus dados e receba um livro sobre linux gratuito direto no seu WhatsApp</p>
+        </div>
+        
+        <div class="form-container">
+            <div class="success-message" id="successMessage">
+                ✅ Dados enviados com sucesso! Entraremos em contato em breve.
+            </div>
+            
+            <div class="error-message" id="errorMessage">
+                ❌ Erro ao enviar dados. Tente novamente.
+            </div>
+            
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Nome</label>
+                    <input type="text" id="name" name="name" required placeholder="Digite seu nome completo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" required placeholder="(11) 99999-9999" pattern="\(\d{2}\) \d{5}-\d{4}" title="Formato: (11) 99999-9999">
+                    <small id="whatsappError" style="color: #dc3545; font-size: 0.8rem; display: none; margin-top: 5px;">
+                        WhatsApp deve ter DDD + 9 dígitos. Ex: (11) 99999-9999
+                    </small>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <span id="btnText">Enviar dados</span>
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                    </div>
+                </button>
+                
+                <p class="privacy-text">
+                    Seus dados estão seguros conosco e serão utilizados apenas para entrarmos em contato.
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  entrevista:
+    build: .
+    container_name: entrevista
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - VIRTUAL_HOST=chat.teadigital.com.br
+      - LETSENCRYPT_HOST=chat.teadigital.com.br
+      - LETSENCRYPT_EMAIL=dev@teadigital.com.br
+    expose:
+      - "3000"
+    networks:
+      - nginx-proxy
+    volumes:
+      # Opcional: logs persistentes
+      - ./logs:/app/logs
+
+networks:
+  nginx-proxy:
+    external: true
+    name: ticketz-docker-acme_nginx-proxy
